@@ -1,6 +1,6 @@
 % EE451 Communication Systems II Project | Group - 18
 
-% 8-QAM Modulation
+% 8-QAM Modulation & Demodulation
 
 clc, clear, close all;
 
@@ -46,8 +46,9 @@ end
 
 %% Plotting
 % Waveform
+tt = t;
 figure;
-plot(t, Y(1:length(tt)));
+plot(tt, Y(1:length(tt)));
 title('Waveform for 8-QAM Modulation');
 xlabel('Time (sec)');
 ylabel('Amplitude (volt)');

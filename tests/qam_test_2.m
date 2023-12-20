@@ -5,6 +5,7 @@ clc, clear, close all;
 symbol_duration = 50e-6;
 Fs = 100e3;
 f = 40e3;
+
 sample_duration = 1.0 / Fs;
 n = symbol_duration / sample_duration;
 M = 8;

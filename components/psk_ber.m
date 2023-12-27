@@ -5,9 +5,10 @@ clc; clear; close all;
 %% Parameters
 
 M = 8;
+
 theta = (0:7) * (2 * pi / 8);
 constPoints = exp(1j * theta);
-numSymbols = 1e5;
+numSymbols = 1e7;
 
 %% Modulation
 
@@ -16,15 +17,20 @@ modulatedSignal = constPoints(symbols + 1);
 
 %% BER Analysis over a range of Eb/N0 values
 
-EbN0_dB = 0:5;
+EbN0_dB = 0:15;
 EbN0 = 10.^(EbN0_dB/10);
 ber_simulated = zeros(size(EbN0));
 
 for k = 1:length(EbN0)
+    
+    Es = mean(abs(constPoints).^2); % symbol energy
+    
+    Eb = Es / log2(M); % bit energy
+    
+    noiseVariance = Eb / EbN0(k);
 
-    % Noise
-    noiseVariance = 1/(2*log2(M)*EbN0(k));
-    noisySignal = modulatedSignal + sqrt(noiseVariance)*(randn(size(modulatedSignal)) + 1j*randn(size(modulatedSignal)));
+    % Add noise
+    noisySignal = modulatedSignal + sqrt(noiseVariance/2)*(randn(size(modulatedSignal)) + 1j*randn(size(modulatedSignal)));
 
     % Demodulation
     demodulatedSymbols = zeros(numSymbols, 1);
@@ -36,7 +42,6 @@ for k = 1:length(EbN0)
     % Calculate BER
     numErrors = sum(demodulatedSymbols ~= symbols);
     ber_simulated(k) = numErrors / numSymbols;
-    
 end
 
 %% Theoretical BER Calculation for 8-PSK
